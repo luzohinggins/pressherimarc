@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Presentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #522883;
+            margin-bottom: 20px;
+        }
+
+        .slide {
+            display: none;
+            padding: 20px;
+            background: linear-gradient(135deg, #522883 0%, #72298d 100%);
+            color: white;
+            border-radius: 8px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #522883;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #72298d;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .counter {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #522883;
+            margin: 20px 0;
+        }
+
+        .info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test de Presentación</h1>
+        
+        <div class="counter" id="counter">Slide 1 / 4</div>
+
+        <div class="slide active">
+            <div>
+                <h2>Slide 1: Portada</h2>
+                <p>Esta es la primera diapositiva de prueba</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div>
+                <h2>Slide 2: Contenido</h2>
+                <p>Navegando correctamente entre slides</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div>
+                <h2>Slide 3: Más contenido</h2>
+                <p>Los botones funcionan bien</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div>
+                <h2>Slide 4: Final</h2>
+                <p>¡Las flechas y botones están operativos!</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="changeSlide(-1)" id="prevBtn">← Anterior</button>
+            <button onclick="changeSlide(1)" id="nextBtn">Siguiente →</button>
+        </div>
+
+        <div class="info">
+            <strong>✅ Instrucciones:</strong><br>
+            • Usa los botones o flechas del teclado (← →)<br>
+            • Prueba scroll del mouse para navegar<br>
+            • Los botones deshabilitados en extremos
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function updateDisplay() {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(s => s.classList.remove('active'));
+            
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.add('active');
+            }
+
+            document.getElementById('counter').textContent = `Slide ${currentSlide + 1} / ${totalSlides}`;
+            
+            // Habilitar/deshabilitar botones
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateDisplay();
+            } else if (direction === -1 && currentSlide > 0) {
+                currentSlide--;
+                updateDisplay();
+            }
+        }
+
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // Rueda del mouse
+        let wheelTimeout;
+        document.addEventListener('wheel', (e) => {
+            if (wheelTimeout) return;
+            if (e.deltaY > 0) changeSlide(1);
+            if (e.deltaY < 0) changeSlide(-1);
+            wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 600);
+        }, { passive: false });
+
+        // Inicializar
+        updateDisplay();
+        console.log('✅ Test.html cargado correctamente');
+        console.log('Total de slides:', totalSlides);
+    </script>
+</body>
+</html>
